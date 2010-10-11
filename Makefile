@@ -20,7 +20,7 @@ ifdef PALMDEVICE
 	endif
 endif
 
-BUILDDIR := bld
+BUILDDIR := org.bithug.palm.squeak
 
 BINDIR := $(PalmPDK)/arm-gcc/bin
 
@@ -55,4 +55,14 @@ all: $(BUILDDIR) $(BUILDDIR)/sdlvnc $(BUILDDIR)/squeak $(BUILDDIR)/$(OUTFILE)
 
 $(BUILDDIR)/$(OUTFILE): $(BUILDDIR) $(SRCDIR)/$(SRC)
 	$(CC) $(DEVICEOPTS) $(CPPFLAGS) $(LDFLAGS) $(LIBS) -o $(BUILDDIR)/$(OUTFILE) $(SRCDIR)/$(SRC)
+
+package: all
+	cp $(SRC)/appinfo.json $(BUILDDIR)/
+	cp $(SRC)/squeak.bmp $(BUILDDIR)/
+	echo "filemode.755=$(OUTFILE)" > $(BUILDDIR)/package.properties
+	echo "filemode.755=squeak" > $(BUILDDIR)/package.properties
+	echo "filemode.755=squeakvm" > $(BUILDDIR)/package.properties
+	echo "filemode.755=squeak.sh" > $(BUILDDIR)/package.properties
+	echo "filemode.755=sdlvnc" > $(BUILDDIR)/package.properties
+	palm-package $(BUILDDIR)
 
