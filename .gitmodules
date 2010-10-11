@@ -1,3 +1,6 @@
 [submodule "src/sdlvnc"]
 	path = src/sdlvnc
 	url = git://git.webos-internals.org/applications/sdlvnc.git
+[submodule "src/squeakvm"]
+	path = src/squeakvm
+	url = http://github.com/Geal/Squeak-VM.git
