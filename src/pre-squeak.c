@@ -43,7 +43,7 @@
 #endif
 
 #ifndef BITMAP
-#define BITMAP "squeak.bmp"
+#define BITMAP "squeak.png"
 #endif
 
 int squeak_pid, vnc_pid;
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   bitmap[strlen(argv[0]) - strlen(EXEC) + 1] = '\0';
   strcat(bitmap, BITMAP);
 
-  temp = SDL_LoadBMP(bitmap);
+  temp = SDL_LoadPNG(bitmap);
   if (temp == NULL) {
     printf("Unable to load bitmap: %s\n", SDL_GetError());
     return 1;
