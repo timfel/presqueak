@@ -42,10 +42,6 @@
 #define EXEC "pre-squeak"
 #endif
 
-#ifndef BITMAP
-#define BITMAP "squeak.png"
-#endif
-
 int squeak_pid, vnc_pid;
 SDL_Surface *Surface;
 
@@ -101,39 +97,9 @@ int main(int argc, char** argv) {
   // Tell it to use OpenGL version 2.0
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   // Set the video mode to full screen with OpenGL-ES support
-  Surface = SDL_SetVideoMode(320, 480, 16, SDL_DOUBLEBUF);
+  Surface = SDL_SetVideoMode(320, 480, 0, SDL_OPENGL);
 
-  SDL_Surface *image;
-  SDL_Surface *temp;
-  char* bitmap = calloc(strlen(argv[0]) + strlen(BITMAP) + 1, sizeof(char));
-  if (!bitmap) {
-    printf("Unable to load bitmap. No buffer.");
-    return 1;
-  }
-
-  strncpy(bitmap, argv[0], strlen(argv[0]) - strlen(EXEC));
-  bitmap[strlen(argv[0]) - strlen(EXEC) + 1] = '\0';
-  strcat(bitmap, BITMAP);
-
-  temp = SDL_LoadPNG(bitmap);
-  if (temp == NULL) {
-    printf("Unable to load bitmap: %s\n", SDL_GetError());
-    return 1;
-  }
-
-  image = SDL_DisplayFormat(temp);
-  SDL_FreeSurface(temp);
-
-  SDL_Rect rect;
-  rect.x = 0;
-  rect.y = 0;
-  rect.w = image->w;
-  rect.h = image->h;
-
-  SDL_BlitSurface(image, &rect, Surface, &rect);
-  SDL_Flip(Surface);
-
-  // No fork the sub-processes
+  // Now fork the sub-processes
   if (!fork_out(argv[0])) {
     return 1; // Error while creating child processes
   }
@@ -164,7 +130,6 @@ int main(int argc, char** argv) {
 
   // Cleanupp
   PDL_Quit();
-  SDL_FreeSurface(image);;
   SDL_Quit();
   termination_handler();
   return 0;

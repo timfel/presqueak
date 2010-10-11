@@ -55,11 +55,10 @@ clean:
 
 package: all
 	cp $(SRCDIR)/appinfo.json $(BUILDDIR)/
-	cp $(SRCDIR)/squeak.bmp $(BUILDDIR)/
-	echo "filemode.755=$(OUTFILE)" > $(BUILDDIR)/package.properties
-	echo "filemode.755=squeak" > $(BUILDDIR)/package.properties
-	echo "filemode.755=squeakvm" > $(BUILDDIR)/package.properties
-	echo "filemode.755=squeak.sh" > $(BUILDDIR)/package.properties
-	echo "filemode.755=sdlvnc" > $(BUILDDIR)/package.properties
+	echo "filemode.777=$(OUTFILE)" > $(BUILDDIR)/package.properties
+	echo "filemode.777=squeak" > $(BUILDDIR)/package.properties
+	echo "filemode.777=squeakvm" > $(BUILDDIR)/package.properties
+	echo "filemode.777=squeak.sh" > $(BUILDDIR)/package.properties
+	echo "filemode.777=sdlvnc" > $(BUILDDIR)/package.properties
 	palm-package $(BUILDDIR)
 
