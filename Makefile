@@ -1,7 +1,7 @@
 APP := PreSqueak
 EXEC := pre-squeak
 SRC := pre-squeak.c
-LIBS := -lSDL -lGLESv2 -lpdl -lm -lpthread -lSDL_vnc -lSDL_image -lSDL_ttf
+LIBS := -lSDL -lGLESv2 -lpdl -lm -lpthread
 OUTFILE := pre-squeak
 
 ifndef PalmPDK
@@ -15,13 +15,12 @@ endif
 ifdef PALMDEVICE
 	ifeq ($(PALMDEVICE),pre)
 		DEVICEOPTS="-mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp"
+	else
+		DEVICEOPTS="-mcpu=arm1136jf-s -mfpu=vfp -mfloat-abi=softfp"
 	endif
 endif
-ifndef DEVICEOPTS
-	DEVICEOPTS="-mcpu=arm1136jf-s -mfpu=vfp -mfloat-abi=softfp"
-endif
 
-BUILDDIR := Build_Device
+BUILDDIR := bld
 
 BINDIR := $(PalmPDK)/arm-gcc/bin
 
@@ -38,18 +37,22 @@ SRCDIR := src
 $(BUILDDIR):
 	@mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)/squeak: $(SRCDIR)/squeakvm
+$(BUILDDIR)/squeak: $(BUILDDIR) $(SRCDIR)/squeakvm
 	mkdir $(SRCDIR)/squeakvm/bld
 	cd $(SRCDIR)/squeakvm/bld;                       \
 		../unix/cmake/configure --prefix=$(BUILDDIR) \
 		make install
 
-$(BUILDDIR)/sdlvnc: $(SRCDIR)/sdlvnc/autogen.sh
+$(BUILDDIR)/sdlvnc: $(BUILDDIR) $(SRCDIR)/sdlvnc/autogen.sh
 	cd $(SRCDIR)/sdlvnc;  \
 		./autogen.sh      \
 		./configure       \
 		make
 		cp src/sdlvnc $(BUILDDIR)/sdlvnc
 
-all: $(BUILDDIR) $(BUILDDIR)/sdlvnc $(BUILDDIR)/squeak
+all: $(BUILDDIR) $(BUILDDIR)/sdlvnc $(BUILDDIR)/squeak $(BUILDDIR)/$(OUTFILE)
 	$(CC) $(DEVICEOPTS) $(CPPFLAGS) $(LDFLAGS) $(LIBS) -o $(BUILDDIR)/$(OUTFILE) $(SRCDIR)/$(SRC)
+
+$(BUILDDIR)/$(OUTFILE): $(BUILDDIR) $(SRCDIR)/$(SRC)
+	$(CC) $(DEVICEOPTS) $(CPPFLAGS) $(LDFLAGS) $(LIBS) -o $(BUILDDIR)/$(OUTFILE) $(SRCDIR)/$(SRC)
+
