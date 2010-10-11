@@ -1,0 +1,3 @@
+[submodule "src/sdlvnc"]
+	path = src/sdlvnc
+	url = git://git.webos-internals.org/applications/sdlvnc.git
