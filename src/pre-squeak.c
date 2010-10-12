@@ -90,6 +90,10 @@ int fork_out(char* program_path) {
 }
 
 int main(int argc, char** argv) {
+  if (!fork_out(argv[0])) {
+    return 1; // Error while creating child processes
+  }
+
   // Initialize the SDL library with the Video subsystem
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE);
   // start the PDL library
@@ -98,11 +102,6 @@ int main(int argc, char** argv) {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   // Set the video mode to full screen with OpenGL-ES support
   Surface = SDL_SetVideoMode(320, 480, 0, SDL_OPENGL);
-
-  // Now fork the sub-processes
-  if (!fork_out(argv[0])) {
-    return 1; // Error while creating child processes
-  }
 
   // Event descriptor
   SDL_Event Event;
