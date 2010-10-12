@@ -35,7 +35,7 @@
 #endif
 
 #ifndef SQUEAK
-#define SQUEAK "squeak"
+#define SQUEAK "bin/squeak"
 #endif
 
 #ifndef EXEC
@@ -74,7 +74,7 @@ int fork_out(char* program_path) {
   squeak_pid = fork();
   if (squeak_pid == -1) return 0;
   if (squeak_pid == 0) { // Child
-    execl("/bin/sh", squeakvm, "-nodisplay", "/media/internal/squeak/squeak");
+    execl(squeakvm, "-nodisplay", "/media/internal/squeak/squeak");
   }
 
   vnc_pid = fork();

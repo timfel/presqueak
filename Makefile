@@ -17,6 +17,7 @@ endif
 
 BUILDDIR := org.bithug.palm.squeak
 
+WD := $(strip $(shell pwd))
 CC := gcc
 INCLUDEDIR := /usr/local/include
 CPPFLAGS := -I$(INCLUDEDIR) -I$(INCLUDEDIR)/SDL -I/usr/include
@@ -32,7 +33,7 @@ $(BUILDDIR):
 $(BUILDDIR)/squeakvm: $(BUILDDIR) $(SRCDIR)/squeakvm
 	mkdir $(SRCDIR)/squeakvm/bld
 	cd $(SRCDIR)/squeakvm/bld;                            \
-		../platforms/unix/cmake/configure --prefix=$(BUILDDIR); \
+		../platforms/unix/cmake/configure --prefix=$(WD)/$(BUILDDIR); \
 		make install
 	mv $(SRCDIR)/squeakvm/bld/* $(BUILDDIR)
 
